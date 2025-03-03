@@ -82,6 +82,9 @@ devDependencies:
   '@vitest/coverage-v8':
     specifier: ^3.0.7
     version: 3.0.7(vitest@3.0.7)
+  dotenv:
+    specifier: ^16.4.7
+    version: 16.4.7
   globals:
     specifier: ^15.14.0
     version: 15.15.0
@@ -106,9 +109,6 @@ devDependencies:
   unplugin-swc:
     specifier: ^1.5.1
     version: 1.5.1(@swc/core@1.11.4)
-  vite-tsconfig-paths:
-    specifier: ^5.1.4
-    version: 5.1.4(typescript@5.7.3)
   vitest:
     specifier: ^3.0.7
     version: 3.0.7(@types/node@22.13.5)
@@ -2783,7 +2783,6 @@ packages:
   /dotenv@16.4.7:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
-    dev: false
 
   /dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -3407,10 +3406,6 @@ packages:
   /globals@15.15.0:
     resolution: {integrity: sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==}
     engines: {node: '>=18'}
-    dev: true
-
-  /globrex@0.1.2:
-    resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
     dev: true
 
   /gopd@1.2.0:
@@ -4966,19 +4961,6 @@ packages:
       yn: 3.1.1
     dev: true
 
-  /tsconfck@3.1.5(typescript@5.7.3):
-    resolution: {integrity: sha512-CLDfGgUp7XPswWnezWwsCRxNmgQjhYq3VXHM0/XIRxhVrKw0M1if9agzryh1QS3nxjCROvV+xWxoJO1YctzzWg==}
-    engines: {node: ^18 || >=20}
-    hasBin: true
-    peerDependencies:
-      typescript: ^5.0.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      typescript: 5.7.3
-    dev: true
-
   /tsconfig-paths-webpack-plugin@4.2.0:
     resolution: {integrity: sha512-zbem3rfRS8BgeNK50Zz5SIQgXzLafiHjOwUAvk/38/o1jHn/V5QAgVUcz884or7WYcPaH3N2CIfUc2u0ul7UcA==}
     engines: {node: '>=10.13.0'}
@@ -5158,22 +5140,6 @@ packages:
       - terser
       - tsx
       - yaml
-    dev: true
-
-  /vite-tsconfig-paths@5.1.4(typescript@5.7.3):
-    resolution: {integrity: sha512-cYj0LRuLV2c2sMqhqhGpaO3LretdtMn/BVX4cPLanIZuwwrkVl+lK84E/miEXkCHWXuq65rhNN4rXsBcOB3S4w==}
-    peerDependencies:
-      vite: '*'
-    peerDependenciesMeta:
-      vite:
-        optional: true
-    dependencies:
-      debug: 4.4.0
-      globrex: 0.1.2
-      tsconfck: 3.1.5(typescript@5.7.3)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
     dev: true
 
   /vite@6.2.0(@types/node@22.13.5):
