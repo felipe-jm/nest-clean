@@ -30,6 +30,6 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "title": "New Question",
-  "content": "Content of the question"
+  "title": "New Question 123",
+  "content": "Content of the question 123"
 }
