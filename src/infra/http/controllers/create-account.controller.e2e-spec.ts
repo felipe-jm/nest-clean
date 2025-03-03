@@ -1,7 +1,7 @@
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import { AppModule } from "@/app.module";
-import { PrismaService } from "@/prisma/prisma.service";
+import { AppModule } from "@/infra/app.module";
+import { PrismaService } from "@/infra/prisma/prisma.service";
 import request from "supertest";
 import { hash } from "bcryptjs";
 
@@ -43,7 +43,7 @@ describe("Create account controller (E2E)", () => {
     await prisma.user.create({
       data: {
         name: "John Doe",
-        email: "john.doe@example.com",
+        email: "john.doe2@example.com",
         password: await hash("password", 8),
       },
     });

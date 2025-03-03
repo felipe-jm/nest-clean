@@ -1,7 +1,7 @@
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import { AppModule } from "@/app.module";
-import { PrismaService } from "@/prisma/prisma.service";
+import { AppModule } from "@/infra/app.module";
+import { PrismaService } from "@/infra/prisma/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import request from "supertest";
 
@@ -32,13 +32,7 @@ describe("Create question controller (E2E)", () => {
       },
     });
 
-    const accessToken = jwt.sign(
-      { sub: user.id },
-      {
-        secret: "secret",
-        expiresIn: "1h",
-      }
-    );
+    const accessToken = jwt.sign({ sub: user.id });
 
     const response = await request(app.getHttpServer())
       .post("/questions")

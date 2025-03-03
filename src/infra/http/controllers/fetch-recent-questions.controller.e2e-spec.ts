@@ -1,7 +1,7 @@
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import { AppModule } from "@/app.module";
-import { PrismaService } from "@/prisma/prisma.service";
+import { AppModule } from "@/infra/app.module";
+import { PrismaService } from "@/infra/prisma/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import request from "supertest";
 
@@ -13,8 +13,7 @@ describe("Fetch recent questions controller (E2E)", () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    })
-    .compile();
+    }).compile();
 
     app = moduleRef.createNestApplication();
 
@@ -33,13 +32,7 @@ describe("Fetch recent questions controller (E2E)", () => {
       },
     });
 
-    const accessToken = jwt.sign(
-      { sub: user.id },
-      {
-        secret: "secret",
-        expiresIn: "1h",
-      }
-    );
+    const accessToken = jwt.sign({ sub: user.id });
 
     await prisma.question.createMany({
       data: [
@@ -65,12 +58,8 @@ describe("Fetch recent questions controller (E2E)", () => {
     });
 
     const response = await request(app.getHttpServer())
-      .post("/questions")
-      .set("Authorization", `Bearer ${accessToken}`)
-      .send({
-        title: "New Question",
-        content: "Question content",
-      });
+      .get("/questions")
+      .set("Authorization", `Bearer ${accessToken}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({
