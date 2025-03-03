@@ -33,3 +33,9 @@ Authorization: Bearer {{token}}
   "title": "New Question 123",
   "content": "Content of the question 123"
 }
+
+###
+
+# @name fetch_recent_questions
+GET {{baseUrl}}/questions?page=1
+Authorization: Bearer {{token}}
