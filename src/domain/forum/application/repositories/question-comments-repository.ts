@@ -1,11 +1,11 @@
 import { QuestionComment } from "../../enterprise/entities/question-comments";
 
-export interface QuestionCommentsRepository {
-  findById(id: string): Promise<QuestionComment | null>;
-  findManyByQuestionId(
+export abstract class QuestionCommentsRepository {
+  abstract findById(id: string): Promise<QuestionComment | null>;
+  abstract findManyByQuestionId(
     questionId: string,
     params: { page: number }
   ): Promise<QuestionComment[]>;
-  create(questionComment: QuestionComment): Promise<QuestionComment>;
-  delete(questionComment: QuestionComment): Promise<void>;
+  abstract create(questionComment: QuestionComment): Promise<QuestionComment>;
+  abstract delete(questionComment: QuestionComment): Promise<void>;
 }
