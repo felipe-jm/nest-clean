@@ -3,6 +3,7 @@ import { QuestionsRepository } from "@/domain/forum/application/repositories/que
 import { PaginationParams } from "@/core/repositories/pagination-params";
 import { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
 import { DomainEvents } from "@/core/events/domain-events";
+
 export class InMemoryQuestionsRepository implements QuestionsRepository {
   public items: Question[] = [];
 
