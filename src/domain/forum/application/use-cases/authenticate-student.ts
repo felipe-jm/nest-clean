@@ -12,7 +12,7 @@ interface AuthenticateStudentUseCaseRequest {
 
 type AuthenticateStudentUseCaseResponse = Either<
   WrongCredentialsError,
-  { access_token: string }
+  { accessToken: string }
 >;
 
 @Injectable()
@@ -46,6 +46,6 @@ export class AuthenticateStudentUseCase {
       sub: student.id.toString(),
     });
 
-    return right({ access_token: accessToken });
+    return right({ accessToken });
   }
 }
