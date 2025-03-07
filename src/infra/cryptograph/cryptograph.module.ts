@@ -4,6 +4,7 @@ import { Encrypter } from "@/domain/forum/application/cryptograph/encrypter";
 
 import { BcryptHasher } from "./bcrypt-hasher";
 import { JwtEncrypter } from "./jwt-encrypter";
+import { HashComparer } from "@/domain/forum/application/cryptograph/hash-comparer";
 
 @Module({
   providers: [
@@ -15,7 +16,11 @@ import { JwtEncrypter } from "./jwt-encrypter";
       provide: Encrypter,
       useClass: JwtEncrypter,
     },
+    {
+      provide: HashComparer,
+      useClass: BcryptHasher,
+    },
   ],
-  exports: [HashGenerator, Encrypter],
+  exports: [HashGenerator, Encrypter, HashComparer],
 })
 export class CryptographModule {}

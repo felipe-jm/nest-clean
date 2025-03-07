@@ -49,7 +49,7 @@ describe("Create account controller (E2E)", () => {
     });
 
     const response = await request(app.getHttpServer()).post("/sessions").send({
-      email: "john.doe@example.com",
+      email: "john.doe2@example.com",
       password: "password",
     });
 
