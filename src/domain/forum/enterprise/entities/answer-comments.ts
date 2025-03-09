@@ -21,6 +21,14 @@ export class AnswerComment extends AggregateRoot<AnswerCommentProps> {
     return this.props.authorId;
   }
 
+  get createdAt() {
+    return this.props.createdAt;
+  }
+
+  get updatedAt() {
+    return this.props.updatedAt;
+  }
+
   static create(
     props: Optional<AnswerCommentProps, "createdAt">,
     id?: UniqueEntityId
