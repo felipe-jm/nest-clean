@@ -2,7 +2,7 @@ import { Answer } from "../../enterprise/entities/answer";
 import { AnswersRepository } from "../repositories/answers-repository";
 import { Either, right } from "@/core/either";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
-
+import { Injectable } from "@nestjs/common";
 interface FetchQuestionAnswersUseCaseRequest {
   questionId: string;
   page: number;
@@ -15,6 +15,7 @@ type FetchQuestionAnswersUseCaseResponse = Either<
   }
 >;
 
+@Injectable()
 export class FetchQuestionAnswersUseCase {
   constructor(private answerRepository: AnswersRepository) {}
 
