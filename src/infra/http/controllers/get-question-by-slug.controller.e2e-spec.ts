@@ -1,48 +1,46 @@
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
+import request from "supertest";
 import { AppModule } from "@/infra/app.module";
 import { PrismaService } from "@/infra/database/prisma/prisma.service";
 import { JwtService } from "@nestjs/jwt";
-import request from "supertest";
+import { StudentFactory } from "test/factories/make-student";
+import { DatabaseModule } from "@/infra/database/database.module";
+import { QuestionFactory } from "test/factories/make-question";
+import { Slug } from "@/domain/forum/enterprise/entities/value-objects/slug";
 
 describe("Get question by slug controller (E2E)", () => {
   let app: INestApplication;
   let prisma: PrismaService;
+  let studentFactory: StudentFactory;
+  let questionFactory: QuestionFactory;
   let jwt: JwtService;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule, DatabaseModule],
+      providers: [StudentFactory, QuestionFactory],
     }).compile();
 
     app = moduleRef.createNestApplication();
 
     prisma = moduleRef.get(PrismaService);
     jwt = moduleRef.get(JwtService);
+    studentFactory = moduleRef.get(StudentFactory);
+    questionFactory = moduleRef.get(QuestionFactory);
 
     await app.init();
   });
 
   test("[GET] /questions/:slug", async () => {
-    const user = await prisma.user.create({
-      data: {
-        name: "John Doe",
-        email: "john.doe@example.com",
-        password: "password",
-      },
-    });
+    const user = await studentFactory.makePrismaStudent();
 
-    const accessToken = jwt.sign({ sub: user.id });
+    const accessToken = jwt.sign({ sub: user.id.toString() });
 
-    await prisma.question.createMany({
-      data: [
-        {
-          title: "New Question 1",
-          content: "Question content 1",
-          authorId: user.id,
-          slug: "new-question-1",
-        },
-      ],
+    await questionFactory.makePrismaQuestion({
+      authorId: user.id,
+      title: "New Question 1",
+      slug: Slug.create("new-question-1"),
     });
 
     const response = await request(app.getHttpServer())
