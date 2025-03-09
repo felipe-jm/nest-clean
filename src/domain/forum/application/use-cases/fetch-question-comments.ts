@@ -2,7 +2,7 @@ import { QuestionComment } from "../../enterprise/entities/question-comments";
 import { QuestionCommentsRepository } from "../repositories/question-comments-repository";
 import { Either, right } from "@/core/either";
 import { ResourceNotFoundError } from "@/core/errors/resource-not-found-error";
-
+import { Injectable } from "@nestjs/common";
 interface FetchQuestionCommentsUseCaseRequest {
   questionId: string;
   page: number;
@@ -15,6 +15,7 @@ type FetchQuestionCommentsUseCaseResponse = Either<
   }
 >;
 
+@Injectable()
 export class FetchQuestionCommentsUseCase {
   constructor(private questionCommentsRepository: QuestionCommentsRepository) {}
 
