@@ -1,7 +1,7 @@
 import { AnswerComment } from "@/domain/forum/enterprise/entities/answer-comments";
 import { AnswerCommentsRepository } from "@/domain/forum/application/repositories/answer-comments-repository";
 import { PaginationParams } from "@/core/repositories/pagination-params";
-import { DomainEvents } from "@/core/events/domain-events";
+
 export class InMemoryAnswerCommentsRepository
   implements AnswerCommentsRepository
 {
@@ -27,8 +27,6 @@ export class InMemoryAnswerCommentsRepository
 
   async create(answerComment: AnswerComment) {
     this.items.push(answerComment);
-
-    DomainEvents.dispatchEventsForAggregate(answerComment.id);
 
     return answerComment;
   }

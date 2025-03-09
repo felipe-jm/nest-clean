@@ -1,32 +1,14 @@
 import { UniqueEntityId } from "@/core/entities/unique-entity-id";
 import { Optional } from "@/core/types/optional";
-import { CommentProps } from "./comment";
-import { AnswerCommentCreatedEvent } from "../events/answer-comment-created-event";
-import { AggregateRoot } from "@/core/entities/aggregate-root";
+import { CommentProps, Comment } from "./comment";
 
 export interface AnswerCommentProps extends CommentProps {
   answerId: UniqueEntityId;
 }
 
-export class AnswerComment extends AggregateRoot<AnswerCommentProps> {
+export class AnswerComment extends Comment<AnswerCommentProps> {
   get answerId() {
     return this.props.answerId;
-  }
-
-  get content() {
-    return this.props.content;
-  }
-
-  get authorId() {
-    return this.props.authorId;
-  }
-
-  get createdAt() {
-    return this.props.createdAt;
-  }
-
-  get updatedAt() {
-    return this.props.updatedAt;
   }
 
   static create(
@@ -40,14 +22,6 @@ export class AnswerComment extends AggregateRoot<AnswerCommentProps> {
       },
       id
     );
-
-    const isNewAnswerComment = !id;
-
-    if (isNewAnswerComment) {
-      answerComment.addDomainEvent(
-        new AnswerCommentCreatedEvent(answerComment)
-      );
-    }
 
     return answerComment;
   }
