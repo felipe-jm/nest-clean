@@ -1,5 +1,4 @@
-import { Get, BadRequestException, Param } from "@nestjs/common";
-import { Controller } from "@nestjs/common";
+import { Get, BadRequestException, Param, Controller } from "@nestjs/common";
 import { GetQuestionBySlugUseCase } from "@/domain/forum/application/use-cases/get-question-by-slug";
 import { QuestionPresenter } from "../presenters/question-presenter";
 
