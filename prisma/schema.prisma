@@ -90,8 +90,9 @@ model Comment {
 }
 
 model Attachment {
-  id   String @id @default(uuid())
-  path String @map("path")
+  id    String @id @default(uuid())
+  title String @map("title")
+  url   String @map("url")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
