@@ -1,34 +1,48 @@
 import { FetchAnswerCommentsUseCase } from "./fetch-answer-comments";
-import { makeAnswer } from "test/factories/make-answer";
 import { UniqueEntityId } from "@/core/entities/unique-entity-id";
 import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-answer-comments-repository";
 import { makeAnswerComment } from "test/factories/make-answer-comment";
+import { InMemoryStudentsRepository } from "test/repositories/in-memory-students-repository";
+import { makeStudent } from "test/factories/make-student";
 
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository;
 let sut: FetchAnswerCommentsUseCase;
 
 describe("Fetch Answer Comments Use Case", () => {
   beforeEach(() => {
-    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository();
+    inMemoryStudentsRepository = new InMemoryStudentsRepository();
+    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository(
+      inMemoryStudentsRepository
+    );
     sut = new FetchAnswerCommentsUseCase(inMemoryAnswerCommentsRepository);
   });
 
   it("should be able to fetch answer comments", async () => {
-    await inMemoryAnswerCommentsRepository.create(
+    const student = makeStudent({
+      name: "John Doe",
+    });
+
+    inMemoryStudentsRepository.items.push(student);
+
+    const comment1 = await inMemoryAnswerCommentsRepository.create(
       makeAnswerComment({
         answerId: new UniqueEntityId("answer-1"),
+        authorId: student.id,
       })
     );
 
-    await inMemoryAnswerCommentsRepository.create(
+    const comment2 = await inMemoryAnswerCommentsRepository.create(
       makeAnswerComment({
         answerId: new UniqueEntityId("answer-1"),
+        authorId: student.id,
       })
     );
 
-    await inMemoryAnswerCommentsRepository.create(
+    const comment3 = await inMemoryAnswerCommentsRepository.create(
       makeAnswerComment({
         answerId: new UniqueEntityId("answer-1"),
+        authorId: student.id,
       })
     );
 
@@ -40,14 +54,37 @@ describe("Fetch Answer Comments Use Case", () => {
     expect(result.isRight()).toBe(true);
     if (result.isRight()) {
       expect(result.value?.answerComments).toHaveLength(3);
+      expect(result.value?.answerComments).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            authorName: "John Doe",
+            commentId: comment1.id,
+          }),
+          expect.objectContaining({
+            authorName: "John Doe",
+            commentId: comment2.id,
+          }),
+          expect.objectContaining({
+            authorName: "John Doe",
+            commentId: comment3.id,
+          }),
+        ])
+      );
     }
   });
 
   it("should be able to fetch paginated answer comments", async () => {
+    const student = makeStudent({
+      name: "John Doe",
+    });
+
+    inMemoryStudentsRepository.items.push(student);
+
     for (let i = 0; i < 22; i++) {
       await inMemoryAnswerCommentsRepository.create(
         makeAnswerComment({
           answerId: new UniqueEntityId("answer-1"),
+          authorId: student.id,
         })
       );
     }

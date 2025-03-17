@@ -41,7 +41,9 @@ describe("Fetch answer comments controller (E2E)", () => {
   });
 
   test("[GET] /answers/:answerId/comments", async () => {
-    const user = await studentFactory.makePrismaStudent();
+    const user = await studentFactory.makePrismaStudent({
+      name: "John Doe",
+    });
 
     const accessToken = jwt.sign({ sub: user.id.toString() });
 
@@ -61,12 +63,12 @@ describe("Fetch answer comments controller (E2E)", () => {
       answerCommentFactory.makePrismaAnswerComment({
         answerId: answer.id,
         authorId: user.id,
-        content: "New Answer 1",
+        content: "New Answer Comment 1",
       }),
       answerCommentFactory.makePrismaAnswerComment({
         answerId: answer.id,
         authorId: user.id,
-        content: "New Answer 2",
+        content: "New Answer Comment 2",
       }),
     ]);
 
@@ -80,10 +82,12 @@ describe("Fetch answer comments controller (E2E)", () => {
     expect(response.body).toEqual({
       comments: expect.arrayContaining([
         expect.objectContaining({
-          content: "New Answer 1",
+          content: "New Answer Comment 1",
+          authorName: "John Doe",
         }),
         expect.objectContaining({
-          content: "New Answer 2",
+          content: "New Answer Comment 2",
+          authorName: "John Doe",
         }),
       ]),
     });
