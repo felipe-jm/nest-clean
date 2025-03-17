@@ -4,10 +4,14 @@ import { Question } from "@/domain/forum/enterprise/entities/question";
 import { PrismaService } from "../prisma.service";
 import { Injectable } from "@nestjs/common";
 import { PrismaQuestionMapper } from "../mappers/prisma-question-mapper";
+import { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
 
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private questionAttachmentsRepository: QuestionAttachmentsRepository
+  ) {}
 
   async findById(id: string): Promise<Question | null> {
     const question = await this.prisma.question.findUnique({
@@ -56,16 +60,38 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
       data,
     });
 
+    await this.questionAttachmentsRepository.createMany(
+      question.attachments.getItems()
+    );
+
     return PrismaQuestionMapper.toDomain(prismaQuestion);
   }
 
   async save(question: Question): Promise<Question> {
     const data = PrismaQuestionMapper.toPrisma(question);
 
-    const prismaQuestion = await this.prisma.question.update({
+    await Promise.all([
+      this.prisma.question.update({
+        where: { id: question.id.toString() },
+        data,
+      }),
+
+      await this.questionAttachmentsRepository.createMany(
+        question.attachments.getNewItems()
+      ),
+
+      await this.questionAttachmentsRepository.deleteMany(
+        question.attachments.getRemovedItems()
+      ),
+    ]);
+
+    const prismaQuestion = await this.prisma.question.findUnique({
       where: { id: question.id.toString() },
-      data,
     });
+
+    if (!prismaQuestion) {
+      throw new Error("Question not found");
+    }
 
     return PrismaQuestionMapper.toDomain(prismaQuestion);
   }

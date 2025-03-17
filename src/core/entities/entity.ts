@@ -14,6 +14,14 @@ export abstract class Entity<Props> {
   }
 
   public equals(entity: Entity<unknown>) {
-    return entity === this || entity.id === this._id;
+    if (entity === this) {
+      return true;
+    }
+
+    if (entity.id === this._id) {
+      return true;
+    }
+
+    return false;
   }
 }

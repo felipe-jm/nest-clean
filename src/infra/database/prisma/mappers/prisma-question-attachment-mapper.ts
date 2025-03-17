@@ -16,4 +16,21 @@ export class PrismaQuestionAttachmentMapper {
       new UniqueEntityId(raw.id)
     );
   }
+
+  static toPrisma(
+    attachments: QuestionAttachment[]
+  ): Prisma.AttachmentUpdateManyArgs {
+    const attachmentIds = attachments.map((attachment) =>
+      attachment.attachmentId.toString()
+    );
+
+    return {
+      where: {
+        id: { in: attachmentIds },
+      },
+      data: {
+        questionId: attachments[0].questionId.toString(),
+      },
+    };
+  }
 }

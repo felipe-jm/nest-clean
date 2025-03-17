@@ -8,7 +8,7 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
   public items: Question[] = [];
 
   constructor(
-    private questionsAttachmentsRepository: QuestionAttachmentsRepository
+    private questionAttachmentsRepository: QuestionAttachmentsRepository
   ) {}
 
   async findById(id: string) {
@@ -42,6 +42,10 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
   async create(question: Question) {
     this.items.push(question);
 
+    await this.questionAttachmentsRepository.createMany(
+      question.attachments.getItems()
+    );
+
     DomainEvents.dispatchEventsForAggregate(question.id);
 
     return question;
@@ -52,6 +56,14 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
 
     this.items[itemIndex] = question;
 
+    await this.questionAttachmentsRepository.createMany(
+      question.attachments.getNewItems()
+    );
+
+    await this.questionAttachmentsRepository.deleteMany(
+      question.attachments.getRemovedItems()
+    );
+
     DomainEvents.dispatchEventsForAggregate(question.id);
 
     return question;
@@ -60,7 +72,7 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
   async delete(question: Question) {
     this.items = this.items.filter((item) => item.id !== question.id);
 
-    await this.questionsAttachmentsRepository.deleteManyByQuestionId(
+    await this.questionAttachmentsRepository.deleteManyByQuestionId(
       question.id.toString()
     );
   }

@@ -27,7 +27,7 @@ type EditQuestionUseCaseResponse = Either<
 @Injectable()
 export class EditQuestionUseCase {
   constructor(
-    private questionRepository: QuestionsRepository,
+    private questionsRepository: QuestionsRepository,
     private questionAttachmentsRepository: QuestionAttachmentsRepository
   ) {}
 
@@ -38,7 +38,7 @@ export class EditQuestionUseCase {
     content,
     attachmentsIds,
   }: EditQuestionUseCaseRequest): Promise<EditQuestionUseCaseResponse> {
-    const question = await this.questionRepository.findById(questionId);
+    const question = await this.questionsRepository.findById(questionId);
 
     if (!question) {
       return left(new ResourceNotFoundError());
@@ -51,7 +51,7 @@ export class EditQuestionUseCase {
     const currentQuestionAttachments =
       await this.questionAttachmentsRepository.findManyByQuestionId(questionId);
 
-    const questionAttachmentsList = new QuestionAttachmentList(
+    const questionAttachmentList = new QuestionAttachmentList(
       currentQuestionAttachments
     );
 
@@ -62,14 +62,16 @@ export class EditQuestionUseCase {
       });
     });
 
-    questionAttachmentsList.update(questionAttachments);
+    questionAttachmentList.update(questionAttachments);
 
+    question.attachments = questionAttachmentList;
     question.title = title;
     question.content = content;
-    question.attachments = questionAttachmentsList;
 
-    await this.questionRepository.save(question);
+    await this.questionsRepository.save(question);
 
-    return right({ question });
+    return right({
+      question,
+    });
   }
 }
