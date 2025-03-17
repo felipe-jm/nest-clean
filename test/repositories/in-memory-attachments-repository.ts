@@ -6,7 +6,5 @@ export class InMemoryAttachmentsRepository implements AttachmentsRepository {
 
   async create(attachment: Attachment) {
     this.items.push(attachment);
-
-    return attachment;
   }
 }

@@ -3,13 +3,22 @@ import { makeAnswerComment } from "test/factories/make-answer-comment";
 import { UniqueEntityId } from "@/core/entities/unique-entity-id";
 import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-answer-comments-repository";
 import { NotAllowedError } from "@/core/errors/not-allowed-error";
+import { InMemoryStudentsRepository } from "test/repositories/in-memory-students-repository";
+import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory-answer-attachments-repository";
 
+let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository;
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let sut: DeleteAnswerCommentUseCase;
 
 describe("Delete Answer Comment Use Case", () => {
   beforeEach(() => {
-    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository();
+    inMemoryAnswerAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository();
+    inMemoryStudentsRepository = new InMemoryStudentsRepository();
+    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository(
+      inMemoryStudentsRepository
+    );
 
     sut = new DeleteAnswerCommentUseCase(inMemoryAnswerCommentsRepository);
   });

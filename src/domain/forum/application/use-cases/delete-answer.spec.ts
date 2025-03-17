@@ -4,11 +4,11 @@ import { UniqueEntityId } from "@/core/entities/unique-entity-id";
 import { makeAnswer } from "test/factories/make-answer";
 import { NotAllowedError } from "@/core/errors/not-allowed-error";
 import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory-answer-attachments-repository";
-import { makeQuestionAttachment } from "test/factories/make-question-attachment";
 import { makeAnswerAttachment } from "test/factories/make-answer-attachment";
 
 let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository;
 let inMemoryAnswersRepository: InMemoryAnswersRepository;
+
 let sut: DeleteAnswerUseCase;
 
 describe("Delete Answer Use Case", () => {
