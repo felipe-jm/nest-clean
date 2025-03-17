@@ -27,7 +27,7 @@ export class PrismaQuestionAttachmentsRepository
       return;
     }
 
-    const data = PrismaQuestionAttachmentMapper.toPrisma(attachments);
+    const data = PrismaQuestionAttachmentMapper.toPrismaUpdateMany(attachments);
 
     await this.prisma.attachment.updateMany(data);
   }

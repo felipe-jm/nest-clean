@@ -4,10 +4,14 @@ import { Injectable } from "@nestjs/common";
 import { PaginationParams } from "@/core/repositories/pagination-params";
 import { Answer } from "@/domain/forum/enterprise/entities/answer";
 import { PrismaAnswerMapper } from "../mappers/prisma-answer-mapper";
+import { AnswerAttachmentsRepository } from "@/domain/forum/application/repositories/answer-attachments-repository";
 
 @Injectable()
 export class PrismaAnswersRepository implements AnswersRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private answerAttachmentsRepository: AnswerAttachmentsRepository
+  ) {}
 
   async findById(id: string): Promise<Answer | null> {
     const answer = await this.prisma.answer.findUnique({
@@ -48,16 +52,38 @@ export class PrismaAnswersRepository implements AnswersRepository {
       data,
     });
 
+    await this.answerAttachmentsRepository.createMany(
+      answer.attachments.getItems()
+    );
+
     return PrismaAnswerMapper.toDomain(prismaAnswer);
   }
 
   async save(answer: Answer): Promise<Answer> {
     const data = PrismaAnswerMapper.toPrisma(answer);
 
-    const prismaAnswer = await this.prisma.answer.update({
+    await Promise.all([
+      await this.prisma.answer.update({
+        where: { id: answer.id.toString() },
+        data,
+      }),
+
+      await this.answerAttachmentsRepository.createMany(
+        answer.attachments.getNewItems()
+      ),
+
+      await this.answerAttachmentsRepository.deleteMany(
+        answer.attachments.getRemovedItems()
+      ),
+    ]);
+
+    const prismaAnswer = await this.prisma.answer.findUnique({
       where: { id: answer.id.toString() },
-      data,
     });
+
+    if (!prismaAnswer) {
+      throw new Error("Answer not found");
+    }
 
     return PrismaAnswerMapper.toDomain(prismaAnswer);
   }
