@@ -1,10 +1,14 @@
-import { Get, Query, BadRequestException, Param } from "@nestjs/common";
-import { Controller } from "@nestjs/common";
+import {
+  Get,
+  Query,
+  BadRequestException,
+  Param,
+  Controller,
+} from "@nestjs/common";
 import { ZodValidationPipe } from "@/infra/http/pipes/zod-validation.pipe";
 import { z } from "zod";
 import { FetchQuestionCommentsUseCase } from "@/domain/forum/application/use-cases/fetch-question-comments";
-import { AnswerPresenter } from "../presenters/answer-presenter";
-import { CommentPresenter } from "../presenters/comment-presenter";
+import { CommentWithAuthorPresenter } from "../presenters/comment-with-author-presenter";
 
 const pageQueryParamSchema = z.coerce
   .string()
@@ -37,6 +41,6 @@ export class FetchQuestionCommentsController {
 
     const { comments } = result.value;
 
-    return { comments: comments.map(CommentPresenter.toHTTP) };
+    return { comments: comments.map(CommentWithAuthorPresenter.toHTTP) };
   }
 }
