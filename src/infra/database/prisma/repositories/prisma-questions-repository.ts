@@ -7,6 +7,7 @@ import { PrismaQuestionMapper } from "../mappers/prisma-question-mapper";
 import { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository";
 import { QuestionDetails } from "@/domain/forum/enterprise/entities/value-objects/question-details";
 import { PrismaQuestionDetailsMapper } from "../mappers/prisma-question-details-mapper";
+import { DomainEvents } from "@/core/events/domain-events";
 
 @Injectable()
 export class PrismaQuestionsRepository implements QuestionsRepository {
@@ -86,6 +87,8 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
       question.attachments.getItems()
     );
 
+    DomainEvents.dispatchEventsForAggregate(question.id);
+
     return PrismaQuestionMapper.toDomain(prismaQuestion);
   }
 
@@ -114,6 +117,8 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
     if (!prismaQuestion) {
       throw new Error("Question not found");
     }
+
+    DomainEvents.dispatchEventsForAggregate(question.id);
 
     return PrismaQuestionMapper.toDomain(prismaQuestion);
   }

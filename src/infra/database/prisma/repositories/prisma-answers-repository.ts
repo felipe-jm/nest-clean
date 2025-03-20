@@ -5,6 +5,7 @@ import { PaginationParams } from "@/core/repositories/pagination-params";
 import { Answer } from "@/domain/forum/enterprise/entities/answer";
 import { PrismaAnswerMapper } from "../mappers/prisma-answer-mapper";
 import { AnswerAttachmentsRepository } from "@/domain/forum/application/repositories/answer-attachments-repository";
+import { DomainEvents } from "@/core/events/domain-events";
 
 @Injectable()
 export class PrismaAnswersRepository implements AnswersRepository {
@@ -56,6 +57,8 @@ export class PrismaAnswersRepository implements AnswersRepository {
       answer.attachments.getItems()
     );
 
+    DomainEvents.dispatchEventsForAggregate(answer.id);
+
     return PrismaAnswerMapper.toDomain(prismaAnswer);
   }
 
@@ -84,6 +87,8 @@ export class PrismaAnswersRepository implements AnswersRepository {
     if (!prismaAnswer) {
       throw new Error("Answer not found");
     }
+
+    DomainEvents.dispatchEventsForAggregate(answer.id);
 
     return PrismaAnswerMapper.toDomain(prismaAnswer);
   }

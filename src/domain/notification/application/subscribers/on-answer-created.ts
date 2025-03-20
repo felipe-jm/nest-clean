@@ -25,7 +25,10 @@ export class OnAnswerCreated implements EventHandler {
       answer.questionId.toString()
     );
 
+    console.log("sendNewAnswerNotification question", question);
+
     if (question) {
+      console.log("sendNewAnswerNotification execute");
       await this.sendNotification.execute({
         recipientId: question.authorId.toString(),
         title: `Nova resposta em ${question.title.substring(0, 40)}`,
