@@ -2,7 +2,6 @@ import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
 import { AppModule } from "@/infra/app.module";
-import { PrismaService } from "@/infra/database/prisma/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import { StudentFactory } from "test/factories/make-student";
 import { DatabaseModule } from "@/infra/database/database.module";
