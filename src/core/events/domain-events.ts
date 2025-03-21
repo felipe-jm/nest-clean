@@ -35,14 +35,11 @@ export class DomainEvents {
   private static findMarkedAggregateByID(
     id: UniqueEntityId
   ): AggregateRoot<unknown> | undefined {
-    console.log("findMarkedAggregateByID", id, this.markedAggregates);
     return this.markedAggregates.find((aggregate) => aggregate.id.equals(id));
   }
 
   public static dispatchEventsForAggregate(id: UniqueEntityId) {
     const aggregate = this.findMarkedAggregateByID(id);
-
-    console.log("dispatchEventsForAggregate", aggregate);
 
     if (aggregate) {
       this.dispatchAggregateEvents(aggregate);

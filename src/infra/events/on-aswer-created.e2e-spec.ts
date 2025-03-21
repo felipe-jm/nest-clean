@@ -31,7 +31,7 @@ describe("On answer created (E2E)", () => {
     studentFactory = moduleRef.get(StudentFactory);
     questionFactory = moduleRef.get(QuestionFactory);
 
-    DomainEvents.shouldRun = false;
+    DomainEvents.shouldRun = true;
 
     await app.init();
   });

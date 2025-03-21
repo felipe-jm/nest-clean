@@ -33,7 +33,7 @@ describe("On question best answer chosen (E2E)", () => {
     questionFactory = moduleRef.get(QuestionFactory);
     answerFactory = moduleRef.get(AnswerFactory);
 
-    DomainEvents.shouldRun = false;
+    DomainEvents.shouldRun = true;
 
     await app.init();
   });

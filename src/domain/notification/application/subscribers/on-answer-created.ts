@@ -4,6 +4,7 @@ import { AnswerCreatedEvent } from "@/domain/forum/enterprise/events/answer-crea
 import { QuestionsRepository } from "@/domain/forum/application/repositories/questions-repository";
 import { SendNotificationUseCase } from "../use-cases/send-notification";
 import { Injectable } from "@nestjs/common";
+
 @Injectable()
 export class OnAnswerCreated implements EventHandler {
   constructor(
@@ -25,10 +26,7 @@ export class OnAnswerCreated implements EventHandler {
       answer.questionId.toString()
     );
 
-    console.log("sendNewAnswerNotification question", question);
-
     if (question) {
-      console.log("sendNewAnswerNotification execute");
       await this.sendNotification.execute({
         recipientId: question.authorId.toString(),
         title: `Nova resposta em ${question.title.substring(0, 40)}`,

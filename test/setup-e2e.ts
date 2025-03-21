@@ -41,9 +41,7 @@ beforeAll(async () => {
 
   await redis.flushdb();
 
-  const result = execSync("pnpm prisma migrate deploy");
-
-  console.log(result.toString());
+  execSync("pnpm prisma migrate deploy");
 });
 
 afterAll(async () => {
