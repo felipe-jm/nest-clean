@@ -5,7 +5,6 @@ import { AppModule } from "@/infra/app.module";
 import { JwtService } from "@nestjs/jwt";
 import { StudentFactory } from "test/factories/make-student";
 import { DatabaseModule } from "@/infra/database/database.module";
-import { QuestionAttachmentFactory } from "test/factories/make-question-attachment";
 import { NotificationFactory } from "test/factories/make-notification";
 import { PrismaService } from "@/infra/database/prisma/prisma.service";
 
@@ -19,7 +18,7 @@ describe("Read notification controller (E2E)", () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [StudentFactory, QuestionAttachmentFactory],
+      providers: [StudentFactory, NotificationFactory],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -48,7 +47,7 @@ describe("Read notification controller (E2E)", () => {
       .patch(`/notifications/${notificationId}/read`)
       .set("Authorization", `Bearer ${accessToken}`);
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(204);
 
     const notificationOnDatabase = await prisma.notification.findFirst({
       where: {
